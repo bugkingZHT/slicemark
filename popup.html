@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SliceMark</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Add Bookmark Form -->
+    <div class="add-bookmark-section" id="addBookmarkSection" style="display: none;">
+      <div class="form-header">
+        <h3>Add Bookmark</h3>
+        <button class="close-form-btn" id="closeFormBtn">×</button>
+      </div>
+      
+      <form id="addBookmarkForm">
+        <div class="form-group">
+          <label for="newBookmarkTitle">Title</label>
+          <input type="text" id="newBookmarkTitle" placeholder="Enter bookmark title" required>
+        </div>
+
+        <div class="form-group">
+          <label>URL Segments</label>
+          <div class="url-segments">
+            <div class="segment-item">
+              <span class="segment-label">Domain:</span>
+              <span class="segment-value" id="segmentDomain"></span>
+            </div>
+            <div class="segment-item">
+              <span class="segment-label">Path:</span>
+              <span class="segment-value" id="segmentPath"></span>
+            </div>
+            <div class="segment-item">
+              <span class="segment-label">Params:</span>
+              <span class="segment-value" id="segmentParams"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" id="tag3Group">
+          <label for="tag3">Level 3 Tag (Params) <span class="required">*</span></label>
+          <input type="text" id="tag3" placeholder="e.g., query params">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" id="cancelFormBtn">Cancel</button>
+          <button type="submit" class="save-btn">Save Bookmark</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Main Bookmarks View -->
+    <div class="main-view" id="mainView">
+    <header>
+      <h1>SliceMark</h1>
+    </header>
+
+    <div class="bookmarks-container" id="bookmarksContainer">
+      <div class="tree-view" id="treeView"></div>
+      <div class="empty-state" id="emptyState">
+        <p>No bookmarks yet.</p>
+        <p>Right-click on any webpage and select "Add to SliceMark" to get started!</p>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
