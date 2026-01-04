@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
+  <div class="container" style="border-radius: 0;">
     <!-- Add Bookmark Form -->
-    <div class="add-bookmark-section" id="addBookmarkSection" style="display: none;">
+    <div class="add-bookmark-section" id="addBookmarkSection" style="display: none; height: 100%;">
       <div class="form-header">
         <h3>Add Bookmark</h3>
         <button class="close-form-btn" id="closeFormBtn">×</button>
@@ -17,36 +17,8 @@
       
       <form id="addBookmarkForm">
         <div class="form-group">
-          <label for="newBookmarkTitle">Title</label>
-          <input type="text" id="newBookmarkTitle" placeholder="Enter bookmark title" required>
-        </div>
-
-        <div class="form-group">
-          <label>URL Segments</label>
-          <div class="url-segments">
-            <div class="segment-item">
-              <span class="segment-label">Domain:</span>
-              <span class="segment-value" id="segmentDomain"></span>
-            </div>
-            <div class="segment-item">
-              <span class="segment-label">Path:</span>
-              <span class="segment-value" id="segmentPath"></span>
-            </div>
-            <div class="segment-item">
-              <span class="segment-label">Params:</span>
-              <span class="segment-value" id="segmentParams"></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group" id="tag3Group">
-          <label for="tag3">Level 3 Tag (Params) <span class="required">*</span></label>
-          <input type="text" id="tag3" placeholder="e.g., query params">
-        </div>
-
-        <div class="form-actions">
-          <button type="button" class="cancel-btn" id="cancelFormBtn">Cancel</button>
-          <button type="submit" class="save-btn">Save Bookmark</button>
+          <label>Select Words for Tags</label>
+          <div class="words-container" id="wordsContainer"></div>
         </div>
       </form>
     </div>
@@ -54,7 +26,9 @@
     <!-- Main Bookmarks View -->
     <div class="main-view" id="mainView">
     <header>
-      <h1>SliceMark</h1>
+      <div class="header-content">
+        <button class="collapse-all-btn" id="collapseAllBtn">Collapse All</button>
+      </div>
     </header>
 
     <div class="bookmarks-container" id="bookmarksContainer">
