@@ -1,24 +1,24 @@
 {
   "manifest_version": 3,
   "name": "SliceMark",
-  "version": "1.0.0",
-  "description": "Flexible and agile bookmark manager with tagging and segmentation",
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "tabs"
-  ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icons/icon.svg"
+  "version": "1.0",
+  "description": "A visual bookmark manager with grid-based layout",
+  "permissions": ["contextMenus", "storage", "tabs"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "SliceMark",
+    "default_width": 840,
+    "default_height": 600
   },
   "icons": {
-    "16": "icons/icon.svg",
-    "32": "icons/icon.svg",
-    "48": "icons/icon.svg",
-    "128": "icons/icon.svg"
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   }
 }

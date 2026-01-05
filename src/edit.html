@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>SliceMark</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 第一部分：编辑区域 -->
+  <div class="edit-section">
+    <div class="edit-header">
+      <div class="edit-title">编辑收藏项</div>
+    </div>
+    <div class="edit-form">
+      <div class="form-group">
+        <label for="textInput">文本:</label>
+        <input type="text" id="textInput" placeholder="输入收藏项文本">
+      </div>
+      <div class="form-group">
+        <label for="lenInput">宽度:</label>
+        <input type="number" id="lenInput" min="1" max="5" value="3" placeholder="1-5列">
+      </div>
+      <div class="error-tip" id="errorTip">宽度必须在1-5之间</div>
+      <div style="display: flex; gap: 10px;">
+        <button class="save-btn" id="saveBtn">确认并添加</button>
+        <button class="save-btn" id="closeBtn" style="background: #888;">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二部分：画布区域 -->
+  <div class="canvas-container">
+    <!-- 画布头部（仅标题+提示） -->
+    <div class="canvas-header">
+      <div class="canvas-title">SliceMark</div>
+      <div class="canvas-tip">总宽度5列 | 卡片宽度1-5列 | 点击卡片跳转URL</div>
+    </div>
+
+    <!-- 画布内容 -->
+    <div id="canvasContent">
+      <!-- 画布内容将通过JavaScript动态生成 -->
+      <div class="canvas-row">
+        <div class="empty-row-tip">暂无收藏项，编辑并保存以添加</div>
+      </div>
+    </div>
+
+    <!-- 列数参考线（辅助可视化） -->
+    <div class="canvas-grid-guide">
+      <span>|</span>
+      <span>|</span>
+      <span>|</span>
+      <span>|</span>
+      <span>|</span>
+    </div>
+  </div>
+
+  <script src="canvas.js"></script>
+  <script src="edit.js"></script>
+  <script>
+    
+  </script>
+</body>
+</html>

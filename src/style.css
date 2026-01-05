@@ -1,0 +1,389 @@
+/* SliceMark Edit Page Specific Styles */
+
+body {
+  width: 800px;
+  padding: 16px;
+}
+
+.edit-section {
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+  margin-bottom: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.edit-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.form-group label {
+  width: 60px;
+  font-size: 12px;
+  color: #555;
+  font-weight: 600;
+}
+
+.form-group input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.save-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+.error-tip {
+  color: #ef5350;
+  font-size: 11px;
+  display: none;
+  animation: shake 0.3s ease;
+  font-weight: 500;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* End of SliceMark Edit Page Specific Styles */
+
+/* SliceMark Canvas Shared Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  font-size: 12px;
+}
+
+.canvas-container {
+  background: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.canvas-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.canvas-tip {
+  font-size: 11px;
+  color: #666;
+  opacity: 0.8;
+}
+
+.canvas-row {
+  min-height: 60px;
+  position: relative;
+  margin-bottom: 8px;
+  border: 1px dashed transparent;
+  background: #f8f8f8;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  padding: 4px;
+}
+
+.canvas-row:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.1);
+}
+
+.slicemark-card {
+  height: 44px;
+  padding: 0 10px;
+  line-height: 44px;
+  background: rgba(165, 180, 252, 0.08);
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: text;
+  color: #4338ca;
+  font-size: 12px;
+  min-width: calc(20% - 8px);
+  max-width: calc(100% - 8px);
+  position: relative;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.slicemark-card:hover {
+  background: rgba(165, 180, 252, 0.15);
+  border-color: #a5b4fc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.15);
+}
+
+.slicemark-card.resizing {
+  transition: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  z-index: 100;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.resize-handle:hover {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+.resize-handle.left-handle {
+  left: 0;
+  border-left: 2px solid transparent;
+}
+
+.resize-handle.left-handle:hover {
+  border-left-color: #667eea;
+}
+
+.resize-handle.right-handle {
+  right: 0;
+  border-right: 2px solid transparent;
+}
+
+.resize-handle.right-handle:hover {
+  border-right-color: #667eea;
+}
+
+.slicemark-card[draggable="true"] {
+  cursor: move;
+}
+
+.canvas-row[draggable="true"] {
+  cursor: move;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.canvas-row.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.canvas-row.insert-before::before,
+.canvas-row.insert-after::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #667eea 15%,
+    #764ba2 50%,
+    #667eea 85%,
+    transparent 100%);
+  box-shadow: 0 0 8px #667eea, 0 0 16px rgba(102, 126, 234, 0.5);
+  animation: glowPulse 1.5s ease-in-out infinite;
+  z-index: 10;
+  border-radius: 2px;
+}
+
+.canvas-row.insert-before::before {
+  top: -5px;
+}
+
+.canvas-row.insert-after::after {
+  bottom: -5px;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 8px #667eea, 0 0 16px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px #764ba2, 0 0 24px rgba(118, 75, 162, 0.8);
+  }
+}
+
+.canvas-row.drag-over {
+  border: 2px dashed #667eea;
+  background: rgba(165, 180, 252, 0.08);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.canvas-row.drop-complete {
+  animation: dropBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes dropBounce {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.slicemark-card.drag-over {
+  border: 2px dashed #667eea;
+  background: rgba(165, 180, 252, 0.15);
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.add-card-btn {
+  height: 44px;
+  flex: 1;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  background: #f8f8f8;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.add-card-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+  background: rgba(165, 180, 252, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+}
+
+.empty-row-tip {
+  width: 100%;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 11px;
+  padding: 8px 0;
+  opacity: 0.8;
+}
+
+.canvas-grid-guide {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+  opacity: 0.7;
+}
+
+.delete-btn {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+  color: white;
+  font-size: 13px;
+  margin-left: 6px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(239, 83, 80, 0.2);
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #ef9a9a 0%, #ef5350 100%);
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
