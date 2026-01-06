@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "SliceMark",
   "version": "1.0",
-  "description": "A visual bookmark manager with grid-based layout",
-  "permissions": ["contextMenus", "storage", "tabs"],
+  "description": "A visual bookmark/textmark manager with tree layout",
+  "permissions": ["storage", "tabs", "sidePanel", "clipboardRead", "clipboardWrite", "contextMenus"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
@@ -11,10 +11,10 @@
     "service_worker": "src/background.js"
   },
   "action": {
-    "default_popup": "src/popup.html",
-    "default_title": "SliceMark",
-    "default_width": 840,
-    "default_height": 600
+    "default_title": "SliceMark"
+  },
+  "side_panel": {
+    "default_path": "src/sidebar.html"
   },
   "icons": {
     "16": "icons/icon-16.png",

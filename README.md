@@ -1,62 +1,32 @@
 # SliceMark
 
-A flexible and agile Chrome extension for managing bookmarks with tagging and segmentation capabilities.
+A minimalist command-line style Chrome extension for managing URLs and clipboard text.
 
 ## Features
 
-- **Right-click Context Menu**: Save any webpage or link to SliceMark by right-clicking
-- **Tag Management**: Add and filter bookmarks by custom tags
-- **Search Functionality**: Quickly find bookmarks by title or URL
-- **Clean Interface**: Modern, intuitive popup interface
-- **One-click Open**: Open bookmarks in new tabs with a single click
+- **Sidebar Interface** - Clean side panel for managing bookmarks
+- **Dual Collection** - Store URLs and clipboard text separately
+- **Smart Display** - Compressed URLs (domain + first path) with full preview on hover
+- **Color Tags** - Visual categorization with colored circles
+- **Flexible Labels** - Add custom labels with truncation and hover preview
+- **Real-time Search** - Fuzzy search across URLs, text, and labels
+- **Quick Actions**
+  - Click URL/labels to open in new tab
+  - Click text to copy to clipboard
+  - Right-click on page to add URL
+  - Right-click on selected text to add to clipboard
+- **Command-line Aesthetic** - Green terminal theme with Courier New font
 
 ## Installation
 
-### For Development
+1. Download or clone this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode"
+4. Click "Load unpacked" and select the extension directory
 
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" in the top right corner
-3. Click "Load unpacked"
-4. Select the `slicemark` directory
-5. The extension icon should appear in your Chrome toolbar
+## Storage
 
-## Usage
-
-### Adding Bookmarks
-
-1. Right-click on any webpage or link
-2. Select "Add to SliceMark" from the context menu
-3. The bookmark will be saved automatically
-
-### Managing Bookmarks
-
-1. Click the SliceMark extension icon in your Chrome toolbar
-2. View all your saved bookmarks
-3. Add tags by typing in the tag input field (comma-separated)
-4. Search bookmarks by title/URL or filter by tags
-5. Click "Open" to open a bookmark in a new tab
-6. Click "Delete" to remove a bookmark
-
-## File Structure
-
-```
-slicemark/
-├── manifest.json       # Extension configuration
-├── background.js       # Background service worker for context menu
-├── popup.html         # Extension popup UI
-├── popup.js           # Popup logic and bookmark management
-├── styles.css         # Popup styling
-├── icons/             # Extension icons
-└── README.md          # This file
-```
-
-## Technologies Used
-
-- Chrome Extension Manifest V3
-- Vanilla JavaScript
-- Chrome Storage API
-- Chrome Context Menus API
-- Chrome Tabs API
+All data is stored locally using `chrome.storage.local` (bookmarks and textmarks).
 
 ## License
 
