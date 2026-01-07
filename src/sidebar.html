@@ -30,16 +30,25 @@
     <div class="color-option" data-color="#8800ff"></div>
     <div class="color-option" data-color="#ff00ff"></div>
   </div>
-  <div id="tree-header">
-    <span class="col-tag">TAG</span>
-    <span class="col-url">URL/TEXT</span>
-    <span class="col-labels">LABELS</span>
+  <div id="tree-header" class="section-header">
+    <span class="collapse-btn">▼</span>
+    <!-- <span class="col-tag">TAG</span> -->
+    <span class="col-content">URL</span>
     <span class="col-options">OPTIONS</span>
   </div>
-  <div id="tree-container"></div>
+  <div id="tree-container" class="collapsible-content"></div>
   
-  <div class="separator"></div>
-  <div id="text-container"></div>
+  <div id="text-header" class="section-header">
+    <span class="collapse-btn">▼</span>
+    <span class="col-content">TEXT</span>
+  </div>
+  <div id="text-container" class="collapsible-content"></div>
+  
+  <div id="tab-header" class="section-header">
+    <span class="collapse-btn">▼</span>
+    <span class="col-content">TAB</span>
+  </div>
+  <div id="tab-container" class="collapsible-content"></div>
   <div id="confirm-dialog" style="display: none;">
     <div class="confirm-message">DELETE THIS ITEM?</div>
     <div class="confirm-buttons">

@@ -162,19 +162,65 @@ body {
   font-family: 'Courier New', Courier, monospace;
   color: #00ff00;
   font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+#text-header {
+  display: flex;
+  padding: 4px 0;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  color: #00ff00;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+#tab-header {
+  display: flex;
+  padding: 4px 0;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  color: #00ff00;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-header {
+  position: relative;
+}
+
+.collapse-btn {
+  margin-right: 8px;
+  transition: transform 0.2s;
+}
+
+.section-header.collapsed .collapse-btn {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 10000px;
+  transition: max-height 0.3s ease;
+}
+
+.collapsible-content.collapsed {
+  max-height: 0;
 }
 
 .col-tag {
   flex: 0 0 40px;
 }
 
-.col-url {
+.col-content {
   flex: 2;
-}
-
-.col-labels {
-  flex: 0 0 auto;
-  margin-left: auto;
 }
 
 .col-options {
@@ -266,6 +312,8 @@ body {
   display: flex;
   align-items: center;
   padding: 2px 0;
+  cursor: move;
+  transition: none;
 }
 
 .tree-tag {
@@ -286,20 +334,21 @@ body {
   opacity: 0.7;
 }
 
-.tree-text {
+.tree-content {
   flex: 2;
   font-family: 'Courier New', Courier, monospace;
   color: #ffffff;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: relative;
 }
 
-.tree-text:hover::after {
-  content: attr(data-full-url);
+.tree-content:hover::after {
+  content: attr(data-hover-content);
   position: absolute;
   background: #000000;
-  color: #00ff00;
+  color: #ffffff;
   border: 1px solid #00ff00;
   padding: 4px 8px;
   margin-top: 20px;
@@ -307,59 +356,18 @@ body {
   right: 0;
   max-width: 90vw;
   word-wrap: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
   z-index: 1000;
 }
 
-.tree-labels {
-  flex: 0 0 auto;
+.tree-text {
   font-family: 'Courier New', Courier, monospace;
-  display: flex;
-  gap: 4px;
-  margin-left: auto;
-  position: relative;
-}
-
-.tree-labels:hover::after {
-  content: attr(data-full-labels);
-  position: absolute;
-  background: #000000;
-  color: #00bfff;
-  border: 1px solid #00ff00;
-  padding: 4px 8px;
-  margin-top: 20px;
-  margin-right: -60px;
-  right: 0;
-  max-width: 90vw;
-  word-wrap: break-word;
-  white-space: normal;
-  z-index: 1000;
+  color: #ffffff;
 }
 
 .label-tag {
-  color: #ffffff;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 120px;
-  display: inline-block;
-  position: relative;
-}
-
-.label-tag:hover::after {
-  content: attr(data-full-label);
-  position: absolute;
-  background: #000000;
   color: #00bfff;
-  border: 1px solid #00ff00;
-  padding: 4px 8px;
-  margin-top: 20px;
-  margin-right: 4px;
-  right: 0;
-  max-width: 90vw;
-  word-wrap: break-word;
-  white-space: normal;
-  z-index: 1000;
+  font-weight: bold;
 }
 
 .tree-options {
