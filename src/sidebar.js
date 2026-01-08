@@ -1,3 +1,33 @@
+// Domain-based color index management
+const PRESET_COLORS = [
+  '#ff0000', '#ff8800', '#ffff00', '#00ffff', 
+  '#0088ff', '#8800ff', '#ff00ff', '#ff0088',
+  '#88ff00', '#00ff88', '#ff4444', '#4444ff'
+];
+
+function extractDomain(url) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname;
+  } catch (e) {
+    return url;
+  }
+}
+
+function getRandomNonWhiteColor() {
+  const randomIndex = Math.floor(Math.random() * PRESET_COLORS.length);
+  return PRESET_COLORS[randomIndex];
+}
+
+function getDomainColor(domain, domainColorIndex) {
+  if (!domainColorIndex[domain]) {
+    domainColorIndex[domain] = getRandomNonWhiteColor();
+    // Save to storage
+    chrome.storage.local.set({ domainColorIndex });
+  }
+  return domainColorIndex[domain];
+}
+
 function buildPrefixTree(urls) {
   if (urls.length === 0) return [];
   
@@ -62,7 +92,7 @@ function renderTree(tree, container) {
     node.labels.forEach((label) => {
       const labelSpan = document.createElement('span');
       labelSpan.className = 'label-tag';
-      labelSpan.style.color = '#00bfff';
+      labelSpan.style.color = node.color;
       labelSpan.textContent = label;
       contentDiv.appendChild(labelSpan);
       
@@ -176,6 +206,9 @@ function renderTabs(tabs, container) {
   tabs.forEach((tab, index) => {
     const line = document.createElement('div');
     line.className = 'tree-line';
+    if (tab.isActive) {
+      line.classList.add('active-tab');
+    }
     line.draggable = true;
     line.dataset.type = 'tabs';
     line.dataset.index = index;
@@ -225,7 +258,7 @@ function renderTabs(tabs, container) {
     allLabels.forEach((label) => {
       const labelSpan = document.createElement('span');
       labelSpan.className = 'label-tag';
-      labelSpan.style.color = '#00bfff';
+      labelSpan.style.color = tab.color;
       labelSpan.textContent = label;
       contentDiv.appendChild(labelSpan);
       
@@ -262,10 +295,17 @@ function renderTabs(tabs, container) {
 }
 
 function loadAndRender() {
-  chrome.storage.local.get(['bookmarks', 'textmarks', 'tabMetadata'], (result) => {
+  chrome.storage.local.get(['bookmarks', 'textmarks', 'tabMetadata', 'domainColorIndex'], (result) => {
     const bookmarks = result.bookmarks || [];
     const textmarks = result.textmarks || [];
     const tabMetadata = result.tabMetadata || {};
+    const domainColorIndex = result.domainColorIndex || {};
+    
+    // Update all bookmarks with domain colors
+    bookmarks.forEach(bookmark => {
+      const domain = extractDomain(bookmark.url);
+      bookmark.color = getDomainColor(domain, domainColorIndex);
+    });
     
     const searchQuery = document.getElementById('search-input').value.toLowerCase();
     
@@ -285,37 +325,56 @@ function loadAndRender() {
       });
     }
     
-    const tree = buildPrefixTree(filteredBookmarks);
-    const container = document.getElementById('tree-container');
-    container.innerHTML = '';
-    renderTree(tree, container);
-    
-    const textContainer = document.getElementById('text-container');
-    textContainer.innerHTML = '';
-    renderTextMarks(filteredTextmarks, textContainer);
-    
-    // Load and render tabs
-    chrome.tabs.query({}, (tabs) => {
-      let enhancedTabs = tabs.map(tab => {
-        const metadata = tabMetadata[tab.id] || {};
-        return {
-          ...tab,
-          labels: metadata.labels || [],
-          color: metadata.color || '#ffffff'
-        };
-      });
+    // Save updated bookmarks with domain colors
+    chrome.storage.local.set({ bookmarks }, () => {
+      const tree = buildPrefixTree(filteredBookmarks);
+      const container = document.getElementById('tree-container');
+      container.innerHTML = '';
+      renderTree(tree, container);
       
-      if (searchQuery) {
-        enhancedTabs = enhancedTabs.filter(tab => {
-          return tab.url.toLowerCase().includes(searchQuery) ||
-                 tab.title.toLowerCase().includes(searchQuery) ||
-                 (tab.labels || []).some(l => l.toLowerCase().includes(searchQuery));
+      const textContainer = document.getElementById('text-container');
+      textContainer.innerHTML = '';
+      renderTextMarks(filteredTextmarks, textContainer);
+      
+      // Load and render tabs
+      chrome.tabs.query({}, (tabs) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
+          const activeTabId = activeTabs[0]?.id;
+          
+          let enhancedTabs = tabs.map(tab => {
+            const metadata = tabMetadata[tab.id] || {};
+            return {
+              ...tab,
+              labels: metadata.labels || [],
+              color: metadata.color || '#ffffff',
+              isActive: tab.id === activeTabId
+            };
+          });
+        
+        if (searchQuery) {
+          enhancedTabs = enhancedTabs.filter(tab => {
+            return tab.url.toLowerCase().includes(searchQuery) ||
+                   tab.title.toLowerCase().includes(searchQuery) ||
+                   (tab.labels || []).some(l => l.toLowerCase().includes(searchQuery));
+          });
+        }
+        
+        // Update tabs with domain colors
+        enhancedTabs.forEach(tab => {
+          const domain = extractDomain(tab.url);
+          const metadata = tabMetadata[tab.id] || {};
+          tab.color = getDomainColor(domain, domainColorIndex);
+          metadata.color = tab.color;
+          tabMetadata[tab.id] = metadata;
         });
-      }
-      
-      const tabContainer = document.getElementById('tab-container');
-      tabContainer.innerHTML = '';
-      renderTabs(enhancedTabs, tabContainer);
+        
+        chrome.storage.local.set({ tabMetadata }, () => {
+          const tabContainer = document.getElementById('tab-container');
+          tabContainer.innerHTML = '';
+          renderTabs(enhancedTabs, tabContainer);
+        });
+      });
+      });
     });
   });
 }
@@ -629,44 +688,79 @@ document.querySelectorAll('.color-option').forEach(option => {
   
   option.addEventListener('click', () => {
     if (currentColorTab) {
-      // Handle tab color change
-      chrome.storage.local.get(['tabMetadata'], (result) => {
+      // Handle tab color change - update domain color index
+      const domain = extractDomain(currentColorTab.url);
+      chrome.storage.local.get(['domainColorIndex', 'tabMetadata'], (result) => {
+        const domainColorIndex = result.domainColorIndex || {};
         const tabMetadata = result.tabMetadata || {};
-        if (!tabMetadata[currentColorTab.id]) {
-          tabMetadata[currentColorTab.id] = {};
-        }
-        tabMetadata[currentColorTab.id].color = color;
-        tabMetadata[currentColorTab.id].labels = currentColorTab.labels || [];
         
-        chrome.storage.local.set({ tabMetadata }, () => {
-          loadAndRender();
-          document.getElementById('color-picker').style.display = 'none';
-          document.getElementById('top-bar').style.display = 'flex';
-          currentColorTab = null;
+        // Update domain color index
+        domainColorIndex[domain] = color;
+        
+        // Update all tabs with same domain
+        chrome.tabs.query({}, (allTabs) => {
+          allTabs.forEach(tab => {
+            const tabDomain = extractDomain(tab.url);
+            if (tabDomain === domain) {
+              if (!tabMetadata[tab.id]) {
+                tabMetadata[tab.id] = {};
+              }
+              tabMetadata[tab.id].color = color;
+            }
+          });
+          
+          chrome.storage.local.set({ domainColorIndex, tabMetadata }, () => {
+            loadAndRender();
+            document.getElementById('color-picker').style.display = 'none';
+            document.getElementById('top-bar').style.display = 'flex';
+            currentColorTab = null;
+          });
         });
       });
     } else if (currentColorNode && currentDataType) {
-      // Handle bookmark/textmark color change
-      chrome.storage.local.get([currentDataType], (result) => {
-        const items = result[currentDataType] || [];
-        const item = items.find(b => {
-          if (currentDataType === 'bookmarks') {
-            return b.url === currentColorNode.url;
-          } else {
-            return b.text === currentColorNode.text;
-          }
-        });
-        if (item) {
-          item.color = color;
-          chrome.storage.local.set({ [currentDataType]: items }, () => {
+      // Handle bookmark/textmark color change - update domain color index
+      if (currentDataType === 'bookmarks') {
+        const domain = extractDomain(currentColorNode.url);
+        chrome.storage.local.get(['domainColorIndex', 'bookmarks'], (result) => {
+          const domainColorIndex = result.domainColorIndex || {};
+          const bookmarks = result.bookmarks || [];
+          
+          // Update domain color index
+          domainColorIndex[domain] = color;
+          
+          // Update all bookmarks with same domain
+          bookmarks.forEach(bookmark => {
+            const bookmarkDomain = extractDomain(bookmark.url);
+            if (bookmarkDomain === domain) {
+              bookmark.color = color;
+            }
+          });
+          
+          chrome.storage.local.set({ domainColorIndex, bookmarks }, () => {
             loadAndRender();
             document.getElementById('color-picker').style.display = 'none';
             document.getElementById('top-bar').style.display = 'flex';
             currentColorNode = null;
             currentDataType = null;
           });
-        }
-      });
+        });
+      } else {
+        // Textmarks don't have domains, keep individual colors
+        chrome.storage.local.get([currentDataType], (result) => {
+          const items = result[currentDataType] || [];
+          const item = items.find(t => t.text === currentColorNode.text);
+          if (item) {
+            item.color = color;
+            chrome.storage.local.set({ [currentDataType]: items }, () => {
+              loadAndRender();
+              document.getElementById('color-picker').style.display = 'none';
+              document.getElementById('top-bar').style.display = 'flex';
+              currentColorNode = null;
+              currentDataType = null;
+            });
+          }
+        });
+      }
     }
   });
 });
@@ -753,27 +847,34 @@ document.getElementById('add-current').addEventListener('click', () => {
           return;
         }
         
-        const newBookmark = { url, title, timestamp: Date.now(), labels: [], color: '#ffffff' };
-        bookmarks.push(newBookmark);
-        
-        chrome.storage.local.set({ bookmarks }, () => {
-          loadAndRender();
+        // Get domain color from index
+        chrome.storage.local.get(['domainColorIndex'], (colorResult) => {
+          const domainColorIndex = colorResult.domainColorIndex || {};
+          const domain = extractDomain(url);
+          const domainColor = getDomainColor(domain, domainColorIndex);
           
-          const displayUrl = getDisplayUrl(url);
-          const node = {
-            url: url,
-            displayUrl: displayUrl,
-            title: title,
-            labels: [],
-            color: '#ffffff'
-          };
-          currentEditNode = node;
-          currentDataType = 'bookmarks';
-          document.getElementById('edit-panel').style.display = 'flex';
-          document.getElementById('color-picker').style.display = 'none';
-          document.getElementById('top-bar').style.display = 'none';
-          document.getElementById('label-input').value = title;
-          document.getElementById('label-input').focus();
+          const newBookmark = { url, title, timestamp: Date.now(), labels: [], color: domainColor };
+          bookmarks.push(newBookmark);
+          
+          chrome.storage.local.set({ bookmarks, domainColorIndex }, () => {
+            loadAndRender();
+            
+            const displayUrl = getDisplayUrl(url);
+            const node = {
+              url: url,
+              displayUrl: displayUrl,
+              title: title,
+              labels: [],
+              color: domainColor
+            };
+            currentEditNode = node;
+            currentDataType = 'bookmarks';
+            document.getElementById('edit-panel').style.display = 'flex';
+            document.getElementById('color-picker').style.display = 'none';
+            document.getElementById('top-bar').style.display = 'none';
+            document.getElementById('label-input').value = title;
+            document.getElementById('label-input').focus();
+          });
         });
       });
     }

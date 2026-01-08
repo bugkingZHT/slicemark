@@ -316,6 +316,18 @@ body {
   transition: none;
 }
 
+.tree-line:hover {
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.tree-line.active-tab {
+  background: rgba(0, 191, 255, 0.15);
+}
+
+.tree-line.active-tab:hover {
+  background: rgba(0, 255, 0, 0.2);
+}
+
 .tree-tag {
   flex: 0 0 40px;
   display: flex;
