@@ -301,6 +301,7 @@ body {
   font-size: 12px;
   padding: 4px 16px;
   cursor: pointer;
+  
 }
 
 #exist-ok:hover {
@@ -317,15 +318,15 @@ body {
 }
 
 .tree-line:hover {
-  background: rgba(0, 255, 0, 0.1);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .tree-line.active-tab {
-  background: rgba(0, 191, 255, 0.15);
+  background: rgba(0, 255, 0, 0.3);
 }
 
 .tree-line.active-tab:hover {
-  background: rgba(0, 255, 0, 0.2);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .tree-tag {
@@ -333,6 +334,7 @@ body {
   display: flex;
   align-items: center;
   margin-right: -18px;
+  margin-left: 4px;
 }
 
 .tag-circle {
